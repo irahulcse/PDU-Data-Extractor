@@ -29,7 +29,7 @@ def write_to_file(data, filename):
         writer.writerow([data])
 
 # Main function
-def main():``
+def main():
     pdu_data = fetch_pdu_data('community', 'host', 161, 'oid')
     filename = 'pdu_data.csv'
     write_to_file(pdu_data, filename)
