@@ -38,11 +38,15 @@ def write_to_file(data, filename):
     with open(filename, 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["PDU Data"])
-        writer.writerow([data])
+        for oid, value in data.items():
+            writer.writerow([f"{oid}: {value}"])
 
 # Main function
 def main():
-    oids = ['1.3.6.1.2.1.1.7.0', '1.3.6.1.2.1.1.6.0']
+    oids = ['1.3.6.1.2.1.1.1.0', '1.3.6.1.2.1.1.2.0', '1.3.6.1.2.1.1.3.0', '1.3.6.1.2.1.1.4.0',
+            '1.3.6.1.2.1.1.7.0', '1.3.6.1.2.1.1.6.0', '1.3.6.1.2.1.1.8.0', '1.3.6.1.2.1.1.9.0',
+            '1.3.6.1.2.1.1.10.0', '1.3.6.1.2.1.1.11.0', '1.3.6.1.2.1.1.12.0']
+    oids = list(set(oids))
     pdu_data = fetch_pdu_data('public', '129.69.80.145', 161, oids)
     filename = 'pdu_data.csv'
     write_to_file(pdu_data, filename)
