@@ -1,5 +1,4 @@
 from pysnmp.hlapi import *
-from ftplib import FTP
 import csv
 
 # Function to fetch data from PDU
@@ -30,7 +29,7 @@ def write_to_file(data, filename):
 
 # Main function
 def main():
-    pdu_data = fetch_pdu_data('community', 'host', 161, 'oid')
+    pdu_data = fetch_pdu_data('public', '129.69.80.145', 161, '1.3.6.1.2.1.1.1.0') #replace with actual values
     filename = 'pdu_data.csv'
     write_to_file(pdu_data, filename)
 
