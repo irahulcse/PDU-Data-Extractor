@@ -1,6 +1,10 @@
 from pysnmp.hlapi import *
 import csv
 import time
+from prometheus_client import start_http_server, Gauge
+
+# Define a gauge metric to represent PDU data
+PDU_GAUGE = Gauge('pdu_data', 'Data fetched from PDU', ['oid'])
 
 # Function to fetch data from PDU
 def fetch_pdu_data(community, host, port, oids):
@@ -29,8 +33,13 @@ def fetch_pdu_data(community, host, port, oids):
                 data = {}
                 for varBind in varBinds:
                     oid = varBind[0].prettyPrint()
-                    value = varBind[1].prettyPrint()
+                    value_str = varBind[1].prettyPrint()
+                    # Remove ' kWh' and convert to float
+                    value = float(value_str.replace(' kWh', ''))
                     data[oid] = value
+                    print(f"Fetched data: {oid} = {value}")  # Print fetched data
+                    # Update the gauge with the fetched value
+                    PDU_GAUGE.labels(oid=oid).set(value)
                 print("Data fetched successfully.")
                 return data
         except Exception as e:
@@ -55,6 +64,8 @@ def write_to_file(data, filename):
 
 # Main function
 def main():
+    # Start up the server to expose the metrics.
+    start_http_server(8000)
     oids=['1.3.6.1.4.1.2606.7.4.2.2.1.10.2.85']
     filename = 'pdu_data.csv'
     
