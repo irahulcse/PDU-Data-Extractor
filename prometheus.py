@@ -3,10 +3,10 @@ import csv
 import time
 from prometheus_client import start_http_server, Gauge
 
-# Define a gauge metric to represent PDU data
+# define a gauge metric to represent PDU data
 PDU_GAUGE = Gauge('pdu_data', 'Data fetched from PDU', ['oid'])
 
-# Function to fetch data from PDU
+# function to fetch data from PDU
 def fetch_pdu_data(community, host, port, oids):
     object_types = construct_object_types(oids)
 
@@ -34,11 +34,9 @@ def fetch_pdu_data(community, host, port, oids):
                 for varBind in varBinds:
                     oid = varBind[0].prettyPrint()
                     value_str = varBind[1].prettyPrint()
-                    # Remove ' kWh' and convert to float
                     value = float(value_str.replace(' kWh', ''))
                     data[oid] = value
-                    print(f"Fetched data: {oid} = {value}")  # Print fetched data
-                    # Update the gauge with the fetched value
+                    print(f"Fetched data: {oid} = {value}")  
                     PDU_GAUGE.labels(oid=oid).set(value)
                 print("Data fetched successfully.")
                 return data
@@ -46,14 +44,13 @@ def fetch_pdu_data(community, host, port, oids):
             print(f"Error: {e}")
             time.sleep(5)
 
-# Function to construct object types
 def construct_object_types(oids):
     object_types = []
     for oid in oids:
         object_types.append(ObjectType(ObjectIdentity(oid)))
     return object_types
 
-# Function to write data to a CSV file
+# function to write data to a CSV file
 def write_to_file(data, filename):
     with open(filename, 'w', newline='') as file:
         writer = csv.writer(file)
@@ -62,9 +59,9 @@ def write_to_file(data, filename):
             writer.writerow([f"{oid}: {value}"])
     print(f"Data written to {filename}.")
 
-# Main function
+# main function
 def main():
-    # Start up the server to expose the metrics.
+    # start up the server to expose the metrics.
     start_http_server(8000)
     oids=['1.3.6.1.4.1.2606.7.4.2.2.1.10.2.85']
     filename = 'pdu_data.csv'
