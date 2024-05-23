@@ -91,3 +91,5 @@ docker-compose down
 ```
 This will start both the Prometheus server and your prometheus.py script.
 
+
+source venv/bin/activate     
