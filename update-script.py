@@ -51,7 +51,7 @@ def write_to_file(data, filename):
     print(f"Data written to {filename}.")
 
 def main():
-    oids=['1.3.6.1.4.1.2606.7.4.2.2.1.10.2.85']
+    oids = ['2606.7.4.1.2.1.2.4']
     filename = 'pdu_data.csv'
     
     while True:

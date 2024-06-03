@@ -39,5 +39,5 @@ def write_to_file(data, filename):
             writer.writerow([oid, value])
 
 if __name__ == "__main__":
-    pdu_data = snmp_walk('public', '129.69.80.145', 161)
+    pdu_data = snmp_walk('public', '129.69.80.130', 161)
     write_to_file(pdu_data, 'all_pdu_oids.csv')
